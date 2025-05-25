@@ -4,8 +4,9 @@ import com.Perfumelandia.model.Usuario;
 import com.Perfumelandia.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
+
 
 @Service
 public class UsuarioService {
@@ -37,4 +38,8 @@ public class UsuarioService {
     public int totalUsuarios() {
         return repo.findAll().size();
     }
+
+    public Usuario login(String email, String password) {
+        return repo.findByEmailAndPassword(email, password);
+    }    
 }

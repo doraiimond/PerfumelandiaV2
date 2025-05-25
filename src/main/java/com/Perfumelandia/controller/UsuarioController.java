@@ -23,4 +23,10 @@ public class UsuarioController {
     public List<Usuario> obtenerUsuarios() {
         return service.getUsuarios();
     }
+
+    @PostMapping("/login")
+    public Usuario login(@RequestBody Usuario datos) {
+        return service.login(datos.getEmail(), datos.getPassword());
+    }
+
 }

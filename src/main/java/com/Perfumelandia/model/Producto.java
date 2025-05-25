@@ -1,17 +1,20 @@
 package com.Perfumelandia.model;
 
-
 import java.util.Optional;
-
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Producto {
-    private long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
+    private Long id;
     private String nombre;
     private int stock;
     private int precio;
