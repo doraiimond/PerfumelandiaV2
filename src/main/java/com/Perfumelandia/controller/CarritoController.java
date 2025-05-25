@@ -26,7 +26,7 @@ public class CarritoController {
     //Metodo para agregar libros al carrito
     @PostMapping("/agregar/{id}")
     public String agregarProducto(@PathVariable int id) {
-        Producto producto = productoService.get;
+        Producto producto = productoService.getProductooId(id);
         if(producto != null){
             carrito.add(producto);
             return "Producto se agregado al carrito: " + producto.getNombre(); 
