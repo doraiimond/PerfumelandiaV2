@@ -1,9 +1,8 @@
 package com.Perfumelandia.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -19,4 +18,7 @@ public class Usuario {
     private String email;
     private String password;
 
+    public static Optional<Usuario> map(Object o){
+    throw new UnsupportedOperationException("Unimplemented method 'map'");
+    }
 }
