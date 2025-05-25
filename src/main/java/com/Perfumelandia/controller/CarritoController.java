@@ -57,7 +57,7 @@ public class CarritoController {
 
     //metodo para contar los items del carrito
     @GetMapping("/total")
-    public int totalLibrosCarritos() {
+    public int totalProductosCarritos() {
         return carrito.size();
     }
     
