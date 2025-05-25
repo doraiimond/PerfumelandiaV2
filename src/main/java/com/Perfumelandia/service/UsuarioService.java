@@ -40,6 +40,6 @@ public class UsuarioService {
     }
 
     public Usuario login(String email, String password) {
-        return repo.inicioS(email, password);
+        return repo.findByEmailAndPassword(email, password);
     }    
 }
