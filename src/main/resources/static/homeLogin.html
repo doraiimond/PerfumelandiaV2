@@ -21,11 +21,9 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="home.html">🧴 Perfumelandia</a>
+      <a class="navbar-brand" href="homeLogin.html">🧴 Perfumelandia</a>
       <div class="d-flex">
         <a href="carrito.html" class="btn btn-outline-light me-2">🛒 Carrito</a>
-        <a href="login.html" class="btn btn-outline-light me-2">Iniciar Sesión</a>
-        <a href="registro.html" class="btn btn-outline-light">Registrarse</a>
       </div>
     </div>
   </nav>
@@ -34,43 +32,87 @@
     <h2 class="text-center mb-4">Catálogo de Productos</h2>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
 
-      <!-- Producto 1 -->
+      
       <div class="col">
         <div class="card h-100">
           <img src="https://www.lodoro.cl/cdn/shop/products/1VSSAMBEROMANCE250.png" class="card-img-top" alt="Perfume Amber Romance" style="height: 200px; object-fit: cover;">
           <div class="card-body text-center">
             <h5 class="card-title">Perfume Ocean</h5>
             <p class="card-text">$18.990</p>
-            <button class="btn btn-primary" onclick="agregarAlCarrito('Perfume Ocean', 18990)">Agregar al carrito</button>
+            <button class="btn btn-primary" onclick="agregarAlCarrito(1)">Agregar al carrito</button>
           </div>
         </div>
       </div>
 
-      <!-- Producto 2 -->
+      
       <div class="col">
         <div class="card h-100">
           <img src="https://www.lodoro.cl/cdn/shop/products/1VSSAMBEROMANCE250.png" class="card-img-top" alt="Perfume Amber Romance" style="height: 200px; object-fit: cover;">
           <div class="card-body text-center">
             <h5 class="card-title">Perfume Sunset</h5>
             <p class="card-text">$22.500</p>
-            <button class="btn btn-primary" onclick="agregarAlCarrito('Perfume Ocean', 18990)">Agregar al carrito</button>
+            <button class="btn btn-primary" onclick="agregarAlCarrito(2)">Agregar al carrito</button>
           </div>
         </div>
       </div>
       
-      <!-- Producto 3 -->
+      
       <div class="col">
         <div class="card h-100">
           <img src="https://www.lodoro.cl/cdn/shop/products/1VSSAMBEROMANCE250.png" class="card-img-top" alt="Perfume Amber Romance" style="height: 200px; object-fit: cover;">
           <div class="card-body text-center">
             <h5 class="card-title">Perfume Midnight</h5>
             <p class="card-text">$24.990</p>
-            <button class="btn btn-primary" onclick="agregarAlCarrito('Perfume Ocean', 18990)">Agregar al carrito</button>
+            <button class="btn btn-primary" onclick="agregarAlCarrito(3)">Agregar al carrito</button>
           </div>
         </div>
       </div>
 
+      <div>   
+        <hr class="my-5">
+        <h2>Carrito de Compras</h2>
+        <button onclick="carrito.vaciarCarrito()">Vaciar el carrito</button>
+         <button onclick="carrito.confirmarCompra()">confirmar Compra</button>
+         <div class="table-responsive">
+            <table id ="tablaCarrito">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Eliminar</th>
+                    <a onclick="carrito.vaciarCarrito()">Vaciar el carrito</a>
+                </tr>
+                <tbody></tbody>
+            </table>
+        </div>
+        <p><strong>Total de Items: </strong> <span id ="totalCarrito">0</span></p>
+      </div>
+
+      <script>
+        function agregarAlCarrito(id) {
+          fetch(`http://localhost:8080/api/v1/carrito/agregar/${id}`, {
+            method: "POST"
+          })
+          .then(res => {
+            if (res.ok) {
+              alert("Producto agregado al carrito");
+            } else {
+              alert("No se pudo agregar el producto");
+            }
+         })
+          .catch(error => {
+            console.error("Error en la solicitud:", error);
+            alert("Error de conexión");
+         });
+       }
+      </script>
+
     </div>
   </div>
+  <script src="js/app_carrito.js"></script>
 </body>
 </html>
+
+
+
+

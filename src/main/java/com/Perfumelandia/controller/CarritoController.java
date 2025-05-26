@@ -1,6 +1,5 @@
 package com.Perfumelandia.controller;
 
-
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@RequestMapping("/api(v1/carrito)")
+@RequestMapping("/api/v1/carrito")
 public class CarritoController {
     private final List<Producto> carrito = new ArrayList<>();
 
@@ -25,8 +24,8 @@ public class CarritoController {
 
     //Metodo para agregar libros al carrito
     @PostMapping("/agregar/{id}")
-    public String agregarProducto(@PathVariable int id) {
-        Producto producto = productoService.getProductooId(id);
+    public String agregarProducto(@PathVariable Long id) {
+        Producto producto = productoService.getProductoId(id);
         if(producto != null){
             carrito.add(producto);
             return "Producto se agregado al carrito: " + producto.getNombre(); 
@@ -61,4 +60,18 @@ public class CarritoController {
         return carrito.size();
     }
     
+    @PostMapping("/confirmar")
+    public String confirmarCompra() {
+        for (Producto producto : carrito) {
+            Producto enBD = productoService.getProductoId(producto.getId());
+            if (enBD != null && enBD.getStock() > 0) {
+                enBD.setStock(enBD.getStock() - 1);
+                productoService.saveProducto(enBD);
+            }
+        }
+        carrito.clear();
+        return "Compra confirmada. Gracias por su compra!";
+    }
+
+
 }

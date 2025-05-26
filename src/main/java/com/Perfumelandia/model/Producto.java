@@ -16,11 +16,12 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  
     private Long id;
     private String nombre;
+    private String marca;
     private int stock;
     private int precio;
 
     public static Optional<Producto> map(Object o){
-    throw new UnsupportedOperationException("Unimplemented method 'map'");
+        throw new UnsupportedOperationException("Unimplemented method 'map'");
     }
 
 }

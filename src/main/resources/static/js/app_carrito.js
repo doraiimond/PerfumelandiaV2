@@ -1,6 +1,6 @@
 // Este archivo contiene el código JavaScript para la gestión de libros en la aplicación web.
 // Se utiliza para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre los libros.
-const API_URL = "http://localhost:8080/api/v1/Carrito"; // URL de la API para acceder a los libros
+const API_URL = "http://localhost:8080/api/v1/carrito"; // URL de la API para acceder a los libros
 // Función para listar los libros en la tabla
 // Se utiliza la API Fetch para obtener los datos de los libros desde el servidor
 function listarPerfume() {
@@ -106,6 +106,76 @@ function limpiarFormulario() {
     perfumeEnEdicionId = null; // Resetear el ID después de limpiar
 }
 
-// Cargar libros al abrir la página
+function agregarAlCarrito(id) {
+    fetch(`http://localhost:8080/api/v1/carrito/agregar/${id}`, {
+        method: "POST"
+    })
+    .then(response => {
+        if (response.ok) {
+            alert("Producto agregado al carrito");
+        } else {
+            alert("No se pudo agregar el producto");
+        }
+    });
+}
 
+function cargarCarrito() {
+  fetch("http://localhost:8080/api/v1/carrito")
+    .then(res => res.json())
+    .then(data => {
+      const tbody = document.querySelector("#tablaCarrito tbody");
+      const total = document.getElementById("totalCarrito");
+      tbody.innerHTML = "";
+      let contador = 0;
+
+      data.forEach(p => {
+        contador++;
+        const fila = `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.nombre}</td>
+            <td>${p.marca}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="eliminarDelCarrito(${p.id})">🗑️</button>
+            </td>
+          </tr>
+        `;
+        tbody.innerHTML += fila;
+      });
+
+      total.textContent = contador;
+    });
+}
+
+function eliminarDelCarrito(id) {
+  fetch(`http://localhost:8080/api/v1/carrito/eliminar/${id}`, {
+    method: "DELETE"
+  })
+  .then(() => {
+    alert("Producto eliminado del carrito");
+    cargarCarrito(); // Actualiza la tabla
+  });
+}
+
+const carrito = {
+  vaciarCarrito: function () {
+    fetch("http://localhost:8080/api/v1/carrito/vaciar", {
+      method: "DELETE"
+    }).then(() => {
+      alert("Carrito vaciado");
+      cargarCarrito();
+    });
+  },
+
+  confirmarCompra: function () {
+    // Aquí iría la lógica si luego quieres confirmar con backend
+    alert("¡Compra confirmada! (funcionalidad por implementar)");
+    this.vaciarCarrito();
+  }
+};
+
+// Ejecuta al cargar la página
+window.onload = cargarCarrito;
+
+cargarCarrito();
 listarPerfume();
