@@ -168,14 +168,13 @@ const carrito = {
   },
 
   confirmarCompra: function () {
-    // Aquí iría la lógica si luego quieres confirmar con backend
+    
     alert("¡Compra confirmada! (funcionalidad por implementar)");
     this.vaciarCarrito();
   }
 };
 
-// Ejecuta al cargar la página
+
 window.onload = cargarCarrito;
 
 cargarCarrito();
-listarPerfume();

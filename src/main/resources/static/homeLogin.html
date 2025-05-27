@@ -68,26 +68,6 @@
         </div>
       </div>
 
-      <div>   
-        <hr class="my-5">
-        <h2>Carrito de Compras</h2>
-        <button onclick="carrito.vaciarCarrito()">Vaciar el carrito</button>
-         <button onclick="carrito.confirmarCompra()">confirmar Compra</button>
-         <div class="table-responsive">
-            <table id ="tablaCarrito">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Marca</th>
-                    <th>Eliminar</th>
-                    <a onclick="carrito.vaciarCarrito()">Vaciar el carrito</a>
-                </tr>
-                <tbody></tbody>
-            </table>
-        </div>
-        <p><strong>Total de Items: </strong> <span id ="totalCarrito">0</span></p>
-      </div>
-
       <script>
         function agregarAlCarrito(id) {
           fetch(`http://localhost:8080/api/v1/carrito/agregar/${id}`, {
