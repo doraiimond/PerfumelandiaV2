@@ -1,5 +1,3 @@
-// Este archivo contiene el código JavaScript para la gestión de libros en la aplicación web.
-// Se utiliza para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre los libros.
 const API_URL = "http://localhost:8080/api/v1/carrito"; // URL de la API para acceder a los libros
 // Función para listar los libros en la tabla
 // Se utiliza la API Fetch para obtener los datos de los libros desde el servidor
