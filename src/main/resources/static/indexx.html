@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+ <meta charset="UTF-8">
+
+ <title>Mi Tienda</title>
+
+</head>
+
+<body>
+
+ <!-- Botones visibles cuando NO estás logeado -->
+
+ <div id="auth-buttons">
+
+  <button xx="login()">Iniciar Sesión</button>
+
+  <button xx="register()">Registrarse</button>
+
+ </div>
+
+
+
+ <!-- Contenido visible cuando estás logeado -->
+
+ <div id="user-info" style="display: none;">
+
+  <span id="welcome-text"></span>
+
+  <button xx="goToCart()">Carrito</button>
+
+  <button xx="logout()">Cerrar sesión</button>
+
+ </div>
+
+
+
+ <script>
+
+  // Simular login
+
+  function login() {
+
+   const nombre = prompt("Ingresa tu nombre de usuario:");
+
+   if (nombre) {
+
+    localStorage.setItem("usuario", nombre);
+
+    mostrarEstadoUsuario();
+
+   }
+
+  }
+
+
+
+  function register() {
+
+   const nombre = prompt("Regístrate con tu nombre:");
+
+   if (nombre) {
+
+    localStorage.setItem("usuario", nombre);
+
+    mostrarEstadoUsuario();
+
+   }
+
+  }
+
+
+
+  function logout() {
+
+   localStorage.removeItem("usuario");
+
+   mostrarEstadoUsuario();
+
+  }
+
+
+
+  function goToCart() {
+
+   window.location.href = "carrito.html";
+
+  }
+
+
+
+  function mostrarEstadoUsuario() {
+
+   const usuario = localStorage.getItem("usuario");
+
+   const authButtons = document.getElementById("auth-buttons");
+
+   const userInfo = document.getElementById("user-info");
+
+   const welcomeText = document.getElementById("welcome-text");
+
+
+
+   if (usuario) {
+
+    authButtons.style.display = "none";
+
+    userInfo.style.display = "block";
+
+    welcomeText.textContent = `Bienvenido, ${usuario}`;
+
+   } else {
+
+    authButtons.style.display = "block";
+
+    userInfo.style.display = "none";
+
+    welcomeText.textContent = "";
+
+   }
+
+  }
+
+
+
+  // Ejecutar al cargar la página
+
+  window.onload = mostrarEstadoUsuario;
+
+ </script>
+
+</body>
+
+</html>
