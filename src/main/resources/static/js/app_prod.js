@@ -1,6 +1,5 @@
     
-    API_URL = "http://localhost:8080/api/v1/productos"; //se conecta con el usuario 
-
+const API_URL = "http://localhost:8080/api/v1/productos";
     
     function agregarProducto() {
       const nombre = document.getElementById("nombre").value;

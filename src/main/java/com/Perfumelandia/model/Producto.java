@@ -20,6 +20,8 @@ public class Producto {
     private int stock;
     private int precio;
 
+    
+
     public static Optional<Producto> map(Object o){
         throw new UnsupportedOperationException("Unimplemented method 'map'");
     }

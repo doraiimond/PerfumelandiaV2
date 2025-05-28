@@ -1,4 +1,4 @@
-API_URL = "http://localhost:8080/api/v1/usuarios/login"; //se conecta con el usuario 
+const API_URL = "http://localhost:8080/api/v1/usuarios/login"; //se conecta con el usuario 
   
 function login() {
   const email = document.getElementById("email").value.trim();
@@ -21,7 +21,7 @@ function login() {
 
       window.location.href = "index.html";
     } else {
-      alert("Cuenta no encontrada. Verifica tus credenciales.");
+      alert("Cuenta no encontrada. Veriaafica tus credenciales.");
     }
   })
   .catch(err => {

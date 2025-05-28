@@ -13,6 +13,7 @@ public class ProductoController {
 
     @Autowired
     private ProductoService service;
+    private boolean datosCargados = false;
 
     @PostMapping
     public Producto registrarProducto(@RequestBody Producto p) {
@@ -21,6 +22,16 @@ public class ProductoController {
 
     @GetMapping
     public List<Producto> obtenerProductos() {
+                if (!datosCargados && service.getProducto().isEmpty()) {
+            service.saveProducto(new Producto(null, "Perfume Ocean", "Marca A", 10, 18990
+              ));
+            service.saveProducto(new Producto(null, "Perfume Sunset", "Marca B", 7, 22500
+              ));
+            service.saveProducto(new Producto(null, "Perfume Midnight", "Marca C", 5, 24990
+              ));
+
+            datosCargados = true;
+        }
         return service.getProducto();
     }
 

@@ -1,16 +1,25 @@
-function registrar(){
-fetch("http://localhost:8080/api/v1/usuarios/registrar",{
+    const API_URL = "http://localhost:8080/api/v1/usuarios";
+    function registrar() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-    method: "POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-        nombre: document.getElementById("nombre").value,
-        email: document.getElementById("email").value,
-        password:document.getElementById("password").value
+      if (!nombre || !email || !password) {
+        alert("Por favor completa todos los campos.");
+        return;
+      }
 
-    })
-}).then(res=>res.json())
-    .then(data=> alert("Usuario registrado con id:"+data.id ));
-
-
-}
+      fetch("http://localhost:8080/api/v1/usuarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, email, password })
+      })
+      .then(response => {
+        if (response.ok) {
+          alert("Usuario registrado correctamente!");
+          window.location.href = "login.html";
+        } else {
+          alert("Error al registrar. Verifiaca los datos.");
+        }
+      });
+    }
