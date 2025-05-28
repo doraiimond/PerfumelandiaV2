@@ -21,8 +21,6 @@ public class CarritoController {
     @Autowired
     private ProductoService productoService;
 
-
-    //Metodo para agregar libros al carrito
     @PostMapping("/agregar/{id}")
     public String agregarProducto(@PathVariable Long id) {
         Producto producto = productoService.getProductoId(id);
@@ -33,20 +31,17 @@ public class CarritoController {
         return "Libro no fue encontrado";
     }
     
-    //metodo para ver el contenido del carrito
     @GetMapping
     public List<Producto> verCarrito() {
         return carrito;
     }
     
-    //metodo para vaciar el carrito
     @DeleteMapping("/vaciar")
     public String vaciarCarrito(){
         carrito.clear();
         return "Carrito Vacio";
     }
 
-    //metodo para eliminar un libro
     @DeleteMapping("/eliminar/{id}")
     public String eliminarProducto(@PathVariable int id ){
         boolean eliminado = carrito.removeIf(libro -> libro.getId() == id);
@@ -54,7 +49,6 @@ public class CarritoController {
 
     }
 
-    //metodo para contar los items del carrito
     @GetMapping("/total")
     public int totalProductosCarritos() {
         return carrito.size();
@@ -62,15 +56,24 @@ public class CarritoController {
     
     @PostMapping("/confirmar")
     public String confirmarCompra() {
-        for (Producto producto : carrito) {
-            Producto enBD = productoService.getProductoId(producto.getId());
-            if (enBD != null && enBD.getStock() > 0) {
-                enBD.setStock(enBD.getStock() - 1);
-                productoService.saveProducto(enBD);
+        Map<Long, Integer> cantidades = new HashMap<>();
+            for (Producto producto : carrito) {
+                long id = producto.getId();
+                cantidades.put(id, cantidades.getOrDefault(id, 0) + 1);
+            }
+        for (Map.Entry<Long, Integer> entry : cantidades.entrySet()) {
+            Long productoId = entry.getKey();
+            int cantidadComprada = entry.getValue();
+            Producto productoEnBD = productoService.getProductoId(productoId);
+            if (productoEnBD != null && productoEnBD.getStock() >= cantidadComprada) {
+                productoEnBD.setStock(productoEnBD.getStock() - cantidadComprada);
+             productoService.saveProducto(productoEnBD);
+            } else {
+                    return "Error no hay stock " + productoId;
             }
         }
         carrito.clear();
-        return "Compra confirmada. Gracias por su compra!";
+        return "Gracias por su compra";
     }
 
 
