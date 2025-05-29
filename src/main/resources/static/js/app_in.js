@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnCarrito = document.getElementById("btn-carrito");
   const btnProblema = document.getElementById("btn-problema");
   const btnLogout = document.getElementById("btn-logout");
-
+  const btnCompra = document.getElementById("btn-confirmar-compra")
   if (usuario) {
     btnLogin.classList.add("d-none");
     btnRegister.classList.add("d-none");
@@ -25,4 +25,5 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("usuario");
     window.location.reload();
   });
+
 });

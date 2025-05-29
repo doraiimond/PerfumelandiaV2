@@ -21,7 +21,7 @@ function login() {
       localStorage.setItem("usuario", JSON.stringify(data));
       window.location.href = "index.html";
     } else {
-      alert("Cuenta no encontrada. Veriaafica tus credenciales.");
+      alert("Cuenta");
     }
   })
   .catch(err => {

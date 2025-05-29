@@ -1,6 +1,7 @@
 const API_URL = "http://localhost:8080/api/v1/carrito";
 
-function agregarAlCarrito(id) {
+
+function agregarAlCarrito (id) {
     fetch(`http://localhost:8080/api/v1/carrito/agregar/${id}`, {
       method: "POST"
     })
@@ -11,35 +12,41 @@ function agregarAlCarrito(id) {
         alert("No se pudo agregar el producto");
       }
    });
+
 }
+
 
 function eliminarDelCarrito(id) {
-      fetch(`http://localhost:8080/api/v1/carrito/eliminar/${id}`, {
-        method: "DELETE"
-      }).then(() => {
-        alert("Producto eliminado del carrito");
-        cargarCarrito();
-      });
+  fetch("http://localhost:8080/api/v1/carrito/eliminar/${id}", { method: "DELETE" })
+    .then(() => {
+      alert("Producto eliminado del carrito");
+      cargarCarrito();
+    });
 }
 
+function vaciarCarrito() {
+  fetch("http://localhost:8080/api/v1/carrito/vaciar", { method: "DELETE" })
+    .then(() => {
+      alert("Carrito vaciado");
+      cargarCarrito();
+    });
+}
 
-const carrito = {
-      vaciarCarrito: function () {
-        fetch("http://localhost:8080/api/v1/carrito/vaciar", {
-          method: "DELETE"
-        }).then(() => {
-          alert("Carrito vaciado");
-          cargarCarrito();
-        });
-      },
+function confirmarCompra() {
+  fetch("http://localhost:8080/api/v1/carrito/confirmar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  })
+  .then(res => res.text())
+  .then(mensaje => {
+    alert(mensaje);
+    cargarCarrito(); 
+  })
+  .catch(err => {
+    alert("Hubo un problema al procesar la compra.");
+  });
+}
 
-      confirmarCompra: function () {
-        
-        alert("¡Compra confirmada!");
-        this.vaciarCarrito();
-      }
-    };
-  
 
 function cargarCarrito() {
   fetch("http://localhost:8080/api/v1/carrito")
@@ -48,29 +55,22 @@ function cargarCarrito() {
       const tbody = document.querySelector("#tablaCarrito tbody");
       const total = document.getElementById("totalCarrito");
       tbody.innerHTML = "";
-      let contador = 0;
-
+      
       data.forEach(p => {
-        contador++;
-        const fila = `
+        tbody.innerHTML += `
           <tr>
             <td>${p.id}</td>
             <td>${p.nombre}</td>
             <td>${p.marca}</td>
             <td>${p.precio}</td>
             <td>${p.stock}</td>
-            <td>
-              <button class="btn btn-danger btn-sm" onclick="eliminarDelCarrito(${p.id})">🗑️</button>
-            </td>
+            <td><button class="btn btn-danger btn-sm" onclick="eliminarDelCarrito(${p.id})">🗑️</button></td>
           </tr>
         `;
-        tbody.innerHTML += fila;
       });
 
-      total.textContent = contador;
+      total.textContent = data.length;
     });
-}   
+}
 
-window.onload = cargarCarrito;
-
-cargarCarrito();
+window.onload = cargarCarrito();

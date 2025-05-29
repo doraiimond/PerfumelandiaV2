@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.Perfumelandia.model.Producto;
+
 import com.Perfumelandia.service.ProductoService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,16 +22,18 @@ public class CarritoController {
     @Autowired
     private ProductoService productoService;
 
+    
     @PostMapping("/agregar/{id}")
-    public String agregarProducto(@PathVariable Long id) {
+    public String agregarAlCarrito(@PathVariable Long id) {
+
         Producto producto = productoService.getProductoId(id);
         if(producto != null){
             carrito.add(producto);
-            return "Producto se agregado al carrito: " + producto.getNombre(); 
+            return "Producto agregado al carrito: " + producto.getNombre(); 
         }
-        return "Libro no fue encontrado";
+        return "producto no fue encontrado";
     }
-    
+
     @GetMapping
     public List<Producto> verCarrito() {
         return carrito;
@@ -57,24 +60,27 @@ public class CarritoController {
     @PostMapping("/confirmar")
     public String confirmarCompra() {
         Map<Long, Integer> cantidades = new HashMap<>();
-            for (Producto producto : carrito) {
-                long id = producto.getId();
-                cantidades.put(id, cantidades.getOrDefault(id, 0) + 1);
-            }
+
+        // Contar cantidad de cada producto en el carrito
+        for (Producto producto : carrito) {
+            long id = producto.getId();
+            cantidades.put(id, cantidades.getOrDefault(id, 0) + 1);
+        }
         for (Map.Entry<Long, Integer> entry : cantidades.entrySet()) {
             Long productoId = entry.getKey();
             int cantidadComprada = entry.getValue();
             Producto productoEnBD = productoService.getProductoId(productoId);
+
             if (productoEnBD != null && productoEnBD.getStock() >= cantidadComprada) {
                 productoEnBD.setStock(productoEnBD.getStock() - cantidadComprada);
-             productoService.saveProducto(productoEnBD);
+                productoService.saveProducto(productoEnBD);
             } else {
-                    return "Error no hay stock " + productoId;
+                return "Error: No hay suficiente stock para el producto " + productoId;
             }
         }
-        carrito.clear();
-        return "Gracias por su compra";
-    }
 
+        carrito.clear();
+        return "Compra confirmada. ¡Gracias por tu compra!";
+    }
 
 }
