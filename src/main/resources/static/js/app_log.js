@@ -18,7 +18,7 @@ function login() {
   .then(data => {
     if (data && data.nombre) {
       alert("Inicio de sesión exitoso como " + data.nombre);
-
+      localStorage.setItem("usuario", JSON.stringify(data));
       window.location.href = "index.html";
     } else {
       alert("Cuenta no encontrada. Veriaafica tus credenciales.");
@@ -27,5 +27,13 @@ function login() {
   .catch(err => {
     console.error(err);
     alert("Error al conectar con el servidor.");
-  });
+
+  }
+  document.getElementById("btn-logout").addEventListener("click", () => {
+  localStorage.removeItem("usuario");
+  window.location.reload();
 }
+
+));
+}
+
