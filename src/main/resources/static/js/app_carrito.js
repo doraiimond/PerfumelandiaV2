@@ -19,6 +19,7 @@ function eliminarDelCarrito(id) {
   fetch("http://localhost:8080/api/v1/carrito/eliminar/${id}", { method: "DELETE" })
     .then(() => {
       alert("Producto eliminado del carrito");
+      agregarNotificacion("Compra Confirmada", "Has realizado una compra con éxito.");
       cargarCarrito();
     });
 }
@@ -27,6 +28,7 @@ function vaciarCarrito() {
   fetch("http://localhost:8080/api/v1/carrito/vaciar", { method: "DELETE" })
     .then(() => {
       alert("Carrito vaciado");
+      agregarNotificacion("Carrito Vaciado", "Has vaciado tu carrito con productos dentro.");
       cargarCarrito();
     });
 }
@@ -38,7 +40,17 @@ function confirmarCompra() {
   })
   .then(res => res.text())
   .then(mensaje => {
-    alert("Compra Realizada");
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const descripcion = carrito.map(p => `${p.nombre} (${p.marca})`).join(", ");
+    fetch("http://localhost:8080/api/v1/notificaciones/agregar", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        asunto: "Movimiento",
+        descripcion: "Compra Realizada con Exito" 
+      })
+    });
+    alert("Compra");
     cargarCarrito(); 
   })
   .catch(err => {
