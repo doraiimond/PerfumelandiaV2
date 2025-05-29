@@ -14,17 +14,15 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reporte {
-
-        
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)                                                                                                                            
     private Long id;
 
     private String nombre;
     private String email;
-    private String password;
+    private String asunto;
 
-    public static Optional<Usuario> map(Object o){
+    public static Optional<Reporte> map(Object o){
     throw new UnsupportedOperationException("Unimplemented method 'map'");
 
     }
