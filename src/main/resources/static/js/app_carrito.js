@@ -15,7 +15,6 @@ function agregarAlCarrito (id) {
 
 }
 
-
 function eliminarDelCarrito(id) {
   fetch("http://localhost:8080/api/v1/carrito/eliminar/${id}", { method: "DELETE" })
     .then(() => {
@@ -39,11 +38,11 @@ function confirmarCompra() {
   })
   .then(res => res.text())
   .then(mensaje => {
-    alert(mensaje);
+    alert("Compra Realizada");
     cargarCarrito(); 
   })
   .catch(err => {
-    alert("Hubo un problema al procesar la compra.");
+    alert("ubo un problema al procesar la compra");
   });
 }
 

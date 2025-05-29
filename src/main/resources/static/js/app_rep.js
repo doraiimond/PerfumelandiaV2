@@ -5,7 +5,7 @@ function enviarR(){
     const email = document.getElementById("email").value.trim();
     const asunto = document.getElementById("asunto").value.trim();
       if (!nombre || !email || !asunto) {
-        alert("Por favor completa todos los campos.");
+        alert("completa todos los campos.");
         return;
       }
 
@@ -19,7 +19,7 @@ function enviarR(){
           alert("Reporte Enviado correctamente!");
           window.location.href = "index.html";
         } else {
-          alert("Error al Enviar. Verifiaca los campos.");
+          alert("Error Verifiaca los campos.");
         }
       });
     }

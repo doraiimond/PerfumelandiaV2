@@ -5,21 +5,21 @@
       const password = document.getElementById("password").value.trim();
 
       if (!nombre || !email || !password) {
-        alert("Por favor completa todos los campos.");
+        alert("por favor completa todos los campos.");
         return;
       }
 
       fetch("http://localhost:8080/api/v1/usuarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, email, password })
+        body: JSON.stringify({ nombre , email , password })
       })
       .then(response => {
         if (response.ok) {
-          alert("Usuario registrado correctamente!");
+          alert("Usuario registrado correctamente");
           window.location.href = "login.html";
         } else {
-          alert("Error al registrar. Verifiaca los datos.");
+          alert("Error verifiaca los datos.");
         }
       });
     }

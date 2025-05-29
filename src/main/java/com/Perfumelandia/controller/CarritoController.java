@@ -56,12 +56,11 @@ public class CarritoController {
     public int totalProductosCarritos() {
         return carrito.size();
     }
-    
+    //libro
     @PostMapping("/confirmar")
     public String confirmarCompra() {
         Map<Long, Integer> cantidades = new HashMap<>();
 
-        // Contar cantidad de cada producto en el carrito
         for (Producto producto : carrito) {
             long id = producto.getId();
             cantidades.put(id, cantidades.getOrDefault(id, 0) + 1);
@@ -75,7 +74,7 @@ public class CarritoController {
                 productoEnBD.setStock(productoEnBD.getStock() - cantidadComprada);
                 productoService.saveProducto(productoEnBD);
             } else {
-                return "Error: No hay suficiente stock para el producto " + productoId;
+                return "No hay stock" + productoId;
             }
         }
 
