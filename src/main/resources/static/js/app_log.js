@@ -27,13 +27,13 @@ function login() {
   .catch(err => {
     console.error(err);
     alert("Error al conectar con el servidor.");
+  });
 
-  }
-  document.getElementById("btn-logout").addEventListener("click", () => {
+}
+
+document.getElementById("btn-logout").addEventListener("click", () => {
   localStorage.removeItem("usuario");
   window.location.reload();
-}
+});
 
-));
-}
 
