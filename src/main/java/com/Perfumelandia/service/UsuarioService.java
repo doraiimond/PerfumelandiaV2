@@ -12,34 +12,34 @@ import java.util.List;
 public class UsuarioService {
 
     @Autowired
-    private UsuarioRepository repo;
+    private UsuarioRepository usuarioRepo;
 
     public Usuario saveUsuario(Usuario u) {
-        return repo.save(u);
+        return usuarioRepo.save(u);
     }
 
     public List<Usuario> getUsuarios() {
-        return repo.findAll();
+        return usuarioRepo.findAll();
     }
 
     public Usuario getUsuarioId(int id) {
-        return repo.findById(id).orElse(null);
+        return usuarioRepo.findById(id).orElse(null);
     }
 
     public Usuario updateUsuario(Usuario u) {
-        return repo.save(u);
+        return usuarioRepo.save(u);
     }
 
     public String deleteUsuario(int id) {
-        repo.deleteById(id);
+        usuarioRepo.deleteById(id);
         return "Usuario eliminado";
     }
 
     public int totalUsuarios() {
-        return repo.findAll().size();
+        return usuarioRepo.findAll().size();
     }
 
     public Usuario login(String email, String password) {
-        return repo.findByEmailAndPassword(email, password);
+        return usuarioRepo.findByEmailAndPassword(email, password);
     }    
 }

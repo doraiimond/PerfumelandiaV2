@@ -12,21 +12,21 @@ import java.util.List;
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService service;
+    private UsuarioService usuarioServ;
 
     @PostMapping
     public Usuario registrar(@RequestBody Usuario u) {
-        return service.saveUsuario(u);
+        return usuarioServ.saveUsuario(u);
     }
 
     @GetMapping
     public List<Usuario> obtenerUsuarios() {
-        return service.getUsuarios();
+        return usuarioServ.getUsuarios();
     }
 
     @PostMapping("/login")
     public Usuario login(@RequestBody Usuario datos) {
-        return service.login(datos.getEmail(), datos.getPassword());
+        return usuarioServ.login(datos.getEmail(), datos.getPassword());
     }
 
 }

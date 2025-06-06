@@ -9,11 +9,11 @@ import com.Perfumelandia.repository.ReporteRepository;
 public class ReporteService {
 
     @Autowired
-    private ReporteRepository reporteR;
+    private ReporteRepository reporteRepo;
 
 
     public Reporte guardarReporte(Reporte r) {
-        return reporteR.save(r);
+        return reporteRepo.save(r);
     }
 
 }

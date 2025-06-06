@@ -11,15 +11,15 @@ import com.Perfumelandia.service.NotificacionService;
 public class NotificacionController {
 
     @Autowired
-    private NotificacionService notificacionService;
+    private NotificacionService notificacionServ;
 
     @PostMapping("/agregar")
     public Notificacion agregarNotificacion(@RequestBody Notificacion notificacion) {
-        return notificacionService.guardarNotificacion(notificacion);
+        return notificacionServ.guardarNotificacion(notificacion);
     }
 
     @GetMapping
     public List<Notificacion> obtenerNotificaciones() {
-        return notificacionService.obtenerNotificaciones();
+        return notificacionServ.obtenerNotificaciones();
     }
 }

@@ -14,12 +14,12 @@ import com.Perfumelandia.service.ReporteService;
 public class ReporteController {
 
     @Autowired
-    private ReporteService serviceR;
+    private ReporteService reporteServ;
 
 
     @PostMapping
     public Reporte enviarR(@RequestBody Reporte r) {
-        return serviceR.guardarReporte(r);
+        return reporteServ.guardarReporte(r);
     }
     
 }

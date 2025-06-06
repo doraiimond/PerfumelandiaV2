@@ -10,13 +10,13 @@ import com.Perfumelandia.repository.NotificacionRepository;
 public class NotificacionService {
 
     @Autowired
-    private NotificacionRepository notificacionRepository;
+    private NotificacionRepository notificacionRepo;
 
     public Notificacion guardarNotificacion(Notificacion notificacion) {
-        return notificacionRepository.save(notificacion);
+        return notificacionRepo.save(notificacion);
     }
 
     public List<Notificacion> obtenerNotificaciones() {
-        return notificacionRepository.findAll();
+        return notificacionRepo.findAll();
     }
 }

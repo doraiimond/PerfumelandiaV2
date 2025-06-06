@@ -20,13 +20,13 @@ public class CarritoController {
     private final List<Producto> carrito = new ArrayList<>();
 
     @Autowired
-    private ProductoService productoService;
+    private ProductoService productoServ;
 
     
     @PostMapping("/agregar/{id}")
     public String agregarAlCarrito(@PathVariable Long id) {
 
-        Producto producto = productoService.getProductoId(id);
+        Producto producto = productoServ.getProductoId(id);
         if(producto != null){
             carrito.add(producto);
             return "Producto agregado al carrito: " + producto.getNombre(); 
@@ -68,11 +68,11 @@ public class CarritoController {
         for (Map.Entry<Long, Integer> entry : cantidades.entrySet()) {
             Long productoId = entry.getKey();
             int cantidadComprada = entry.getValue();
-            Producto productoEnBD = productoService.getProductoId(productoId);
+            Producto productoEnBD = productoServ.getProductoId(productoId);
 
             if (productoEnBD != null && productoEnBD.getStock() >= cantidadComprada) {
                 productoEnBD.setStock(productoEnBD.getStock() - cantidadComprada);
-                productoService.saveProducto(productoEnBD);
+                productoServ.saveProducto(productoEnBD);
             } else {
                 return "No hay stock" + productoId;
             }
