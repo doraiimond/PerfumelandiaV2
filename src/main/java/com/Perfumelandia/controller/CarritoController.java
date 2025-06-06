@@ -21,7 +21,7 @@ public class CarritoController {
 
     @Autowired
     private ProductoService productoServ;
-
+    
     
     @PostMapping("/agregar/{id}")
     public String agregarAlCarrito(@PathVariable Long id) {
@@ -46,8 +46,8 @@ public class CarritoController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public String eliminarProducto(@PathVariable int id ){
-        boolean eliminado = carrito.removeIf(libro -> libro.getId() == id);
+    public String eliminarProducto(@PathVariable Long id ){
+        boolean eliminado = carrito.removeIf(producto -> producto.getId().equals((long) id));
         return eliminado ? "Perfume ha sido eliminado del carrito" : "Producto no estaba en el carrito";
 
     }
@@ -56,7 +56,7 @@ public class CarritoController {
     public int totalProductosCarritos() {
         return carrito.size();
     }
-    //libro
+    
     @PostMapping("/confirmar")
     public String confirmarCompra() {
         Map<Long, Integer> cantidades = new HashMap<>();
@@ -72,7 +72,7 @@ public class CarritoController {
 
             if (productoEnBD != null && productoEnBD.getStock() >= cantidadComprada) {
                 productoEnBD.setStock(productoEnBD.getStock() - cantidadComprada);
-                productoServ.saveProducto(productoEnBD);
+                productoServ.updateProducto(productoEnBD);
             } else {
                 return "No hay stock" + productoId;
             }

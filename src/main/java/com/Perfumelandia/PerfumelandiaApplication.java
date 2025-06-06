@@ -11,3 +11,9 @@ public class PerfumelandiaApplication {
 	}
 
 }
+
+
+
+
+//netstat -aon | findstr :8080
+//taskkill /PID 12345 /F
