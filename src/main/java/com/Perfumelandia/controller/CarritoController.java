@@ -79,7 +79,7 @@ public class CarritoController {
         }
 
         carrito.clear();
-        return "Compra confirmada. ¡Gracias por tu compra!";
+        return "¡Gracias por tu compra!";
     }
 
 }
