@@ -1,104 +1,98 @@
 package com.Perfumelandia.controller;
 
-//impotar las clases del backed necesarias para las pruebas de integracion
 import com.Perfumelandia.model.Usuario;
 import com.Perfumelandia.service.UsuarioService;
-//importar clase ObjectMapper para
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-//
-import org.springframework.http.MediaType;
-//
-import org.springframework.test.web.servlet.MockMvc;
-//importar las clases necesarias para realizar las peticiones HTTP simuladas
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-//importar clases necesarias para verificar los resultados de las peticiones HTTP simuladas
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//importar any para simular los argumentos en los metodos del servicio de usuario
-import static org.mockito.ArgumentMatchers.any;
-//impotar Mockito para simular el comportamiento de los metodos del servicio Usuario con when
-import static org.mockito.Mockito.when;
+// Importar las clases necesarias para las pruebas de integración
+
+import com.fasterxml.jackson.databind.ObjectMapper;// Importar ObjectMapper para convertir objetos a JSON
+
+import org.junit.jupiter.api.Test;// Importar las anotaciones de prueba de JUnit
+import org.springframework.beans.factory.annotation.Autowired;// Importar las anotaciones de Spring para inyección de dependencias
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest; // Importar la anotación para pruebas de controladores web
+import org.springframework.boot.test.mock.mockito.MockBean; // Importar la anotación para simular beans de Spring
+
+import org.springframework.http.MediaType;// Importar el tipo de contenido MediaType para las peticiones HTTP
+import org.springframework.test.web.servlet.MockMvc; // Importar MockMvc para realizar peticiones HTTP simuladas
 
 import java.util.Optional;
 
-//usar la anotacion WebMvcTest para crear una prueba a un controlador especifico (UsuarioController
-@WebMvcTest(UsuarioController.class)
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*; // Importar las clases necesarias para realizar peticiones HTTP simuladas
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;// Importar las clases necesarias para verificar los resultados de las peticiones HTTP simuladas
+import static org.mockito.ArgumentMatchers.any; // Importar cualquier para simular argumentos en los métodos del servicio
+import static org.mockito.Mockito.when; // Importar Mockito para simular el comportamiento de los métodos del servicio
+
+@WebMvcTest(UsuarioController.class)// Anotar la clase para pruebas de controladores web, especificando el controlador a probar
 public class UsuarioControllerIntegrationTest {
-    //inyectar MockMvs para realizar las peticiones HTTP simuladas
+    // Inyectar MockMvc para realizar peticiones HTTP simuladas
     @Autowired
     private MockMvc mockMvc;
-
-    //simular el servicio de usuario
+    // Simular el repositorio de usuarios
     @MockBean
-    private UsuarioService UsuarioService;
-
-    //usar ObjectMapper para convertir los objetos a JSON
+    private UsuarioService usuarioService;
+    // Usar ObjectMapper para convertir objetos a JSON
     @Autowired
     private ObjectMapper objectMapper;
+    
+    // Test para el caso de registro de un nuevo usuario
+    @Test 
+    void registrarUsuario_returnGuardado() throws Exception { // Crear un nuevo usuario para registrar
+        Usuario nuevoUsuario = new Usuario(); // Crear una instancia de usuario
+        nuevoUsuario.setNombre("Juan"); // Establecer el nombre del usuario
+        nuevoUsuario.setEmail("juan@gmail.com"); // Establecer el email del usuario
+        nuevoUsuario.setPassword("1234"); // Establecer la contraseña del usuario
 
-    //test para simular el registro de un nuevo usuario
-    @Test
-    void registraUsuario_ReturnGuardar() throws Exception {
-        Usuario newUser = new Usuario(); //crear una instancia de usuario
-        newUser.setNombre("Juan"); //establecer el nombre del usuario de simulacion
-        newUser.setEmail("Juan@gmail.com"); //establecer el gmail del usuario de simulacion
-        newUser.setPassword("hola"); //establecer el contraseña del usuario de simulacion
+        // Simular que el usuario ya existe
+        when(usuarioService.registrar(any(Usuario.class))).thenReturn(nuevoUsuario); // Simular que el usuario ya está registrado
 
-        //simular el comportamiento del metodo registar de usuarioService
-        when(UsuarioService.saveUsuario(any(Usuario.class)))
-            .thenReturn(newUser);
-        
-        //simular la peticion POST de usuarioController para registar
+
+        // Realizar la petición POST para registrar un nuevo usuario
         mockMvc.perform(post("/api/v1/usuarios/registrar")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(newUser)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.nombre").value("Juan"))
-            .andExpect(jsonPath("$.email").value("Juan@gmail.com"))
-            .andExpect(jsonPath("$.Password").value("hola"));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(nuevoUsuario)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Juan"))
+                .andExpect(jsonPath("$.email").value("juan@gmail.com"))
+                .andExpect(jsonPath("$.password").value("1234"));
     }
-
-    //Test para simular inicio de sesion de un usuario registrado
+    // Test para el caso de inicio de sesión con un usuario existente
     @Test
-    void loginUsuario_ReturnOk() throws Exception {
-        Usuario userExistente = new Usuario();
-        userExistente.setNombre("Juan"); 
-        userExistente.setEmail("Juan@gmail.com");
-        userExistente.setPassword("hola");
+    void loginUsuario_returnOK() throws Exception {
+        Usuario usuarioExistente = new Usuario();
+        usuarioExistente.setNombre("Juan");
+        usuarioExistente.setEmail("juan@gmail.com");
+        usuarioExistente.setPassword("1234");
 
-        //simular el comportamiento del metodo autenticar del servicio de UsuarioService con un usuario registrado
-        when(UsuarioService.login("Juan@gmail.com", "hola"))
-            .thenReturn(Optional.of(userExistente));
+         // Simular que el usuario existe
+        when(usuarioService.autenticar("juan@gmail.com", "1234"))
+                .thenReturn(Optional.of(usuarioExistente));
 
 
-        mockMvc.perform(post("/api/v1/usuarios/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(ObjectMapper.writeValueAsString(userExistente)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.result").value())
+        // Realizar la petición POST para iniciar sesión
+        mockMvc.perform(post("/api/v1/usuarios/login") // Usar el endpoint de login
+                .contentType(MediaType.APPLICATION_JSON) // Establecer el tipo de contenido a JSON
+                .content(objectMapper.writeValueAsString(usuarioExistente))) // Convertir el usuario a JSON y enviarlo en el cuerpo de la petición
+                .andExpect(status().isOk()) // Verificar que la respuesta tenga un estado 200 OK
+                .andExpect(jsonPath("$.result").value("OK"))    // Verificar que el resultado sea "OK"
+                .andExpect(jsonPath("$.nombre").value("Juan")) // Verificar que el nombre del usuario sea correcto
+                .andExpect(jsonPath("$.email").value("juan@gmail.com")) // Verificar que el email del usuario sea correcto
+                .andExpect(jsonPath("$.password").value("1234"));   // Verificar que la contraseña del usuario sea correcta
     }
-
-    //test login usuario de registrado
+    // Test para el caso de inicio de sesión con un usuario inexistente
     @Test
-    void loginUsuario_ReturnError() throws Exception {
-        Usuario userInexistente = new Usuario();
-        userInexistente.setEmail("hola@gmail.com");
-        userInexistente.setPassword("hola");
+    void loginUsuario_returnError() throws Exception {
+        Usuario usuarioInexistente = new Usuario();
+        usuarioInexistente.setEmail("noexiste@gmail.com");
+        usuarioInexistente.setPassword("1234");
 
-        //simular con usuario no registrado
-        when(UsuarioService.login("hola@gmail.com", "hola"))
-        .thenReturn(Optional.empty());
-
-
-        //simular la peticion post del usuariocontroller para inciar sesion con un usuario no registrado
-
-        mockMvc.perform(post("/api/v1/usuarios/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(userInexistente)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$result","error"));
+        // Simular el comportamiento del repositorio para un usuario inexistente
+        when(usuarioService.autenticar("noexiste@gmail.com", "1234")) // Intentar autenticar un usuario que no existe
+                .thenReturn(Optional.empty());// Simular que el usuario no existe
+        
+                // Realizar la petición POST para iniciar sesión
+        mockMvc.perform(post("/api/v1/usuarios/login") // Usar el endpoint de login
+                .contentType(MediaType.APPLICATION_JSON) // Establecer el tipo de contenido a JSON
+                .content(objectMapper.writeValueAsString(usuarioInexistente)))//
+                .andExpect(status().isOk()) // Verificar que la respuesta tenga un estado 200 OK
+                .andExpect(jsonPath("$.result").value("Error")); // Verificar que el resultado sea "Error"
     }
 }
