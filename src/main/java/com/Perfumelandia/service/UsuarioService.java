@@ -1,7 +1,7 @@
-package com.example.bibliotecaduocV2.Service;
+package com.Perfumelandia.service;
 
-import com.example.bibliotecaduocV2.Model.usuario;
-import com.example.bibliotecaduocV2.Repository.usuarioRepository;
+import com.Perfumelandia.model.Usuario;
+import com.Perfumelandia.repository.UsuarioRepository;
 
 import java.util.Optional;
 
@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class usuarioService {
+public class UsuarioService {
 
     @Autowired //Inyectar el repositorio de usuario
-    private usuarioRepository repo;
+    private UsuarioRepository repo;
     //Método para registrar usuarios
-    public usuario registrar(usuario u) {
+    public Usuario registrar(Usuario u) {
         return repo.save(u);//Verificar si el usuario ya existe en la base de dato
     }
     //Método que autentifica los usuarios
