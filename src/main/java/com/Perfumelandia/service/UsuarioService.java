@@ -22,3 +22,9 @@ public class UsuarioService {
         return repo.findByEmail(email).filter(u -> u.getPassword().equals(password));
     }
 }
+
+
+
+//   public Optional<Usuario> autenticar(String email, String password) {
+ //     throw new Error("Unresolved compilation problem: \n\tThe method findByEmail(String) is undefined for the type UsuarioRepository\n");
+//   }
