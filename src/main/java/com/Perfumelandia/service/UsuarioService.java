@@ -18,13 +18,7 @@ public class UsuarioService {
         return repo.save(u);//Verificar si el usuario ya existe en la base de dato
     }
     //Método que autentifica los usuarios
-    public Optional<Usuario> autenticar(String email, String password) {
-        return repo.findByEmail(email).filter(u -> u.getPassword().equals(password));
-    }
+       public Optional<Usuario> autenticar(String email, String password) {
+     throw new Error("Unresolved compilation problem: \n\tThe method findByEmail(String) is undefined for the type UsuarioRepository\n");
+  }
 }
-
-
-
-//   public Optional<Usuario> autenticar(String email, String password) {
- //     throw new Error("Unresolved compilation problem: \n\tThe method findByEmail(String) is undefined for the type UsuarioRepository\n");
-//   }
