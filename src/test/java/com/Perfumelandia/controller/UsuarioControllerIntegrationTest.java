@@ -9,7 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;// Importar ObjectMapper para
 import org.junit.jupiter.api.Test;// Importar las anotaciones de prueba de JUnit
 import org.springframework.beans.factory.annotation.Autowired;// Importar las anotaciones de Spring para inyección de dependencias
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest; // Importar la anotación para pruebas de controladores web
-import org.springframework.boot.test.mock.mockito.MockBean; // Importar la anotación para simular beans de Spring
+ // Importar la anotación para simular beans de Spring
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import org.springframework.http.MediaType;// Importar el tipo de contenido MediaType para las peticiones HTTP
 import org.springframework.test.web.servlet.MockMvc; // Importar MockMvc para realizar peticiones HTTP simuladas
@@ -27,7 +28,7 @@ public class UsuarioControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     // Simular el repositorio de usuarios
-    @MockBean
+    @MockitoBean
     private UsuarioService usuarioService;
     // Usar ObjectMapper para convertir objetos a JSON
     @Autowired
