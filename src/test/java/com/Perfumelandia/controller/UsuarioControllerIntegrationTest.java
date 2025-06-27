@@ -43,7 +43,7 @@ public class UsuarioControllerIntegrationTest {
         nuevoUsuario.setPassword("1234"); // Establecer la contraseña del usuario
 
         // Simular que el usuario ya existe
-        when(usuarioService.registrar(any(Usuario.class))).thenReturn(nuevoUsuario); // Simular que el usuario ya está registrado
+        when(usuarioService.saveUsuario(any(Usuario.class))).thenReturn(nuevoUsuario); // Simular que el usuario ya está registrado
 
 
         // Realizar la petición POST para registrar un nuevo usuario

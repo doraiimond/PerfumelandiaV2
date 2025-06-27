@@ -6,18 +6,29 @@ import org.springframework.web.bind.annotation.*;
 import com.Perfumelandia.model.Notificacion;
 import com.Perfumelandia.service.NotificacionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
+
 @RestController
 @RequestMapping("/api/v1/notificaciones")
+@Tag(name="Notificaciones",
+    description="Operaciones de las Notificaciones")
 public class NotificacionController {
 
     @Autowired
     private NotificacionService notificacionServ;
 
+    @Operation(summary="Agreagar Notificacion",
+                description="Crea una notificaciones y la guarda en la BD")
     @PostMapping("/agregar")
     public Notificacion agregarNotificacion(@RequestBody Notificacion notificacion) {
         return notificacionServ.guardarNotificacion(notificacion);
     }
 
+    @Operation(summary="Listar Notificaciones",
+                description="Muestra las notificaciones Registradas")    
     @GetMapping
     public List<Notificacion> obtenerNotificaciones() {
         return notificacionServ.obtenerNotificaciones();
