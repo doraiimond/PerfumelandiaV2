@@ -11,6 +11,9 @@ public class ReporteService {
     @Autowired
     private ReporteRepository reporteRepo;
 
+    public Reporte obtenerReporte(Long id) {
+        return reporteRepo.findById(id).orElseThrow(() -> new RuntimeException("Reporte no encontrado"));
+    }
 
     public Reporte guardarReporte(Reporte r) {
         return reporteRepo.save(r);

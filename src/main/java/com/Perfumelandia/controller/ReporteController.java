@@ -1,6 +1,8 @@
 package com.Perfumelandia.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +29,13 @@ public class ReporteController {
     public Reporte enviarR(@RequestBody Reporte r) {
         return reporteServ.guardarReporte(r);
     }
+
+    @Operation(summary = "Ver Reporte",
+       description = "Devuelve un reporte por su ID")
+    @GetMapping("/{id}")
+    public Reporte verReporte(@PathVariable Long id) {
+        return reporteServ.obtenerReporte(id);
+    }
+
     
 }
