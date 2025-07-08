@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.1.7:8080/api/v1/carrito";
+const API_URL = "http://192.168.1.10:8080/api/v2/carrito";
 
 
 function agregarAlCarrito (id) {
@@ -16,7 +16,7 @@ async function eliminarDelCarrito(id) {
   try{
     const response = await fetch (`${API_URL}/eliminar/${id}`, {method: "DELETE"});
     alert("Producto Eliminado");
-      fetch("http://192.168.1.7:8080/api/v1/notificaciones/agregar", {
+      fetch("http://192.168.1.10:8080/api/v2/notificaciones/agregar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -40,7 +40,7 @@ function vaciarCarrito() {
 }
 
 function confirmarCompra() {
-  fetch("http://192.168.1.7:8080/api/v1/carrito/confirmar", {
+  fetch("http://192.168.1.10:8080/api/v2/carrito/confirmar", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
   })
@@ -50,7 +50,7 @@ function confirmarCompra() {
     fetch(`${API_URL}`)
       .then(res => res.json())
         console.log("Compra echa")
-          fetch("http://192.168.1.7:8080/api/v1/notificaciones/agregar", {
+          fetch("http://192.168.1.10:8080/api/v2/notificaciones/agregar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -63,7 +63,7 @@ function confirmarCompra() {
 }
 
 function cargarCarrito() {
-      fetch("http://192.168.1.7:8080/api/v1/carrito")
+      fetch("http://192.168.1.10:8080/api/v2/carrito")
         .then(res => res.json())
         .then(data => {
           const tbody = document.querySelector("#tablaCarrito tbody");

@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("http://192.168.1.7:8080/api/v1/productos")
+  fetch("http://192.168.1.10:8080/api/v2/productos")
     .then(res => res.json())
     .then(data => {
       data.forEach(producto => {

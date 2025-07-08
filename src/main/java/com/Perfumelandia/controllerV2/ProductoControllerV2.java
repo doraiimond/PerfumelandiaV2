@@ -75,13 +75,6 @@ public class ProductoControllerV2 {
         return productoServ.getProductoId(id);
     }
 
-    @Operation(summary="actualizar Producto",
-                description="Actualiza un producto segun su id")
-    @PutMapping(value = "/{id}",produces = MediaTypes.HAL_JSON_VALUE)
-    public Producto actualizarProducto(@PathVariable Long id, @RequestBody Producto p) {
-        p.setId(id);
-        return productoServ.updateProducto(p);
-    }
 
     @Operation(hidden = true)
     @GetMapping("/{id}/actualizar")

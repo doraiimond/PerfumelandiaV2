@@ -53,7 +53,7 @@ public class CarritoController {
     @DeleteMapping("/eliminar/{id}")
     public String eliminarProducto(@PathVariable Long id ){
         boolean eliminado = carrito.removeIf(producto -> producto.getId().equals((long) id));
-        return eliminado ? "Perfume ha sido eliminado del carrito" : "Producto no estaba en el carrito";
+        return eliminado ? "perfume ha sido eliminado del carrito" : "producto no estaba en el carrito";
 
     }
 
@@ -88,7 +88,7 @@ public class CarritoController {
         }
 
         carrito.clear();
-        return "¡Gracias por tu compra!";
+        return "Gracias por tu compra";
     }
 
 }

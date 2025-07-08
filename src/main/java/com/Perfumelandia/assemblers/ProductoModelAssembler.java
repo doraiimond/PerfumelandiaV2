@@ -12,15 +12,16 @@ import org.springframework.lang.NonNull;
 @Component
 public class ProductoModelAssembler implements RepresentationModelAssembler <Producto,EntityModel<Producto>> {
     @Override
+
     public @NonNull EntityModel<Producto> toModel(@NonNull Producto producto){
+        if (producto.getId() == null) {
+            System.err.println("⚠️ Producto sin ID: " + producto);
+            return EntityModel.of(producto); // Sin enlaces
+        }
+
         return EntityModel.of(producto,
-            linkTo(methodOn(ProductoControllerV2.class).
-            obtenerProductoPorId(producto.getId())).withSelfRel(),
-            linkTo(methodOn(ProductoControllerV2.class).
-            actualizarProducto(null, producto)).withRel("Actualizar"),
-            linkTo(methodOn(ProductoControllerV2.class).
-            eliminarProducto(producto.getId())).withRel("Eliminar"),
-            linkTo(methodOn(ProductoControllerV2.class).
-            obtenerProductos()).withRel("Productos"));
+            linkTo(methodOn(ProductoControllerV2.class).obtenerProductoPorId(producto.getId())).withSelfRel(),
+            linkTo(methodOn(ProductoControllerV2.class).eliminarProducto(producto.getId())).withRel("Eliminar"),
+            linkTo(methodOn(ProductoControllerV2.class).obtenerProductos()).withRel("Productos"));
     }
 }
