@@ -28,7 +28,6 @@ public class NotificacionControllerV2 {
     @Autowired
     private NotificacionModelAssembler assembler;
 
-
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Notificacion>> crearNotificacion(@RequestBody Notificacion notificacion) {
         Notificacion creada = notificacionServ.guardarNotificacion(notificacion);

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -35,7 +36,8 @@ public class NotificacionControllerIntegrationTest {
         Notificacion noti = new Notificacion("Promoción", "¡Gran descuento esta semana!");
         Notificacion guardada = new Notificacion("Promoción", "¡Gran descuento esta semana!");
 
-        when(notificacionService.guardarNotificacion(noti)).thenReturn(guardada);
+        // Usamos 'any' porque el objeto recibido no es exactamente el mismo
+        when(notificacionService.guardarNotificacion(any(Notificacion.class))).thenReturn(guardada);
 
         mockMvc.perform(post("/api/v1/notificaciones/agregar")
                 .contentType(MediaType.APPLICATION_JSON)

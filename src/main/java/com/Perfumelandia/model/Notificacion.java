@@ -1,8 +1,13 @@
 package com.Perfumelandia.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Notificacion {
 
     @Id
@@ -11,13 +16,9 @@ public class Notificacion {
     private String asunto;
     private String descripcion;
 
-    public Notificacion() {}
 
     public Notificacion(String asunto, String descripcion) {
         this.asunto = asunto;
         this.descripcion = descripcion;
     }
-
-    public String getAsunto() { return asunto; }
-    public String getDescripcion() { return descripcion; }
 }

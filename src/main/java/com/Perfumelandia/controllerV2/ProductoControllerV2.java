@@ -73,11 +73,4 @@ public class ProductoControllerV2 {
     public String eliminarProducto(@PathVariable Long id) {
         return productoServ.deleteProducto(id);
     }
-
-    
-
-    
-
-
 }
-
