@@ -14,4 +14,5 @@ function cargarNotificaciones() {
     .catch(error => console.error("Error al cargar notificaciones:", error));
 }
 
+
 window.onload = cargarNotificaciones;

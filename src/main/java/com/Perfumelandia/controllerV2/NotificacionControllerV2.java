@@ -46,4 +46,7 @@ public class NotificacionControllerV2 {
         return CollectionModel.of(notificaciones,
             linkTo(methodOn(NotificacionControllerV2.class).listarNotificaciones()).withSelfRel());
     }
+
+
+    
 }
