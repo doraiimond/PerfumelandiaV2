@@ -1,14 +1,14 @@
 package com.Perfumelandia.assemblers;
 
-import com.Perfumelandia.model.Producto;
 import com.Perfumelandia.controllerV2.CarritoControllerV2;
-import com.Perfumelandia.controllerV2.ProductoControllerV2;
+import com.Perfumelandia.model.Producto;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
-import org.springframework.stereotype.Component;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CarritoModelAssembler implements RepresentationModelAssembler<Producto, EntityModel<Producto>> {
@@ -16,14 +16,10 @@ public class CarritoModelAssembler implements RepresentationModelAssembler<Produ
     @Override
     public @NonNull EntityModel<Producto> toModel(@NonNull Producto producto) {
         return EntityModel.of(producto,
-            linkTo(methodOn(ProductoControllerV2.class)
-                .obtenerProductoPorId(producto.getId())).withRel("VerDetalle"),
-            linkTo(methodOn(CarritoControllerV2.class)
-                .eliminarProducto(producto.getId())).withRel("EliminarDelCarrito"),
-            linkTo(methodOn(CarritoControllerV2.class)
-                .verCarrito()).withRel("VerCarrito"),
-            linkTo(methodOn(CarritoControllerV2.class)
-                .confirmarCompra()).withRel("ConfirmarCompra")
+            linkTo(methodOn(CarritoControllerV2.class).buscarProducto(producto.getId())).withSelfRel(),
+            linkTo(methodOn(CarritoControllerV2.class).verCarrito()).withRel("carrito"),
+            linkTo(methodOn(CarritoControllerV2.class).eliminarProducto(producto.getId())).withRel("eliminar"),
+            linkTo(methodOn(CarritoControllerV2.class).vaciarCarrito()).withRel("vaciar")
         );
     }
 }

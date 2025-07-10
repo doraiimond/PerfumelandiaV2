@@ -1,4 +1,4 @@
-    const API_URL = "http://192.168.1.10:8080/api/v2/usuarios";
+    const API_URL = "http://192.168.1.9:8080/api/v2/usuarios";
     function registrar() {
       const nombre = document.getElementById("nombre").value.trim();
       const email = document.getElementById("email").value.trim();
@@ -9,7 +9,7 @@
         return;
       }
 
-      fetch("http://192.168.1.10:8080/api/v2/usuarios", {
+      fetch("http://192.168.1.9:8080/api/v2/usuarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre , email , password })

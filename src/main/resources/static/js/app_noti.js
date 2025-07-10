@@ -1,5 +1,5 @@
 function cargarNotificaciones() {
-  fetch("http://192.168.1.10:8080/api/v2/notificaciones")
+  fetch("http://192.168.1.9:8080/api/v2/notificaciones")
     .then(res => res.json())
     .then(data => {
       const tbody = document.querySelector("#tablaNotificaciones tbody");

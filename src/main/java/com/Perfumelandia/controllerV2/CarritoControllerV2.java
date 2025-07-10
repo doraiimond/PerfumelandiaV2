@@ -1,93 +1,78 @@
 package com.Perfumelandia.controllerV2;
 
-import java.util.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.Perfumelandia.assemblers.CarritoModelAssembler;
 import com.Perfumelandia.model.Producto;
-
 import com.Perfumelandia.service.ProductoService;
+import com.Perfumelandia.assemblers.CarritoModelAssembler;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.MediaTypes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.*;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/api/v2/carrito")
 public class CarritoControllerV2 {
+
     private final List<Producto> carrito = new ArrayList<>();
 
     @Autowired
-    private ProductoService productoServ;
-    private CarritoModelAssembler carritoAssembler;
+    private ProductoService productoService;
 
-    @PostMapping("/agregar/{id}")
-    public String agregarAlCarrito(@PathVariable Long id) {
-        Producto producto = productoServ.getProductoId(id);
-        if(producto != null){
-            carrito.add(producto);
-            return "Producto agregado al carrito: " + producto.getNombre(); 
-        }
-        return "producto no fue encontrado";
-    }
+    @Autowired
+    private CarritoModelAssembler assembler;
 
-    @DeleteMapping("/vaciar")
-    public String vaciarCarrito(){
-        carrito.clear();
-        return "Carrito Vacio";
-    }
 
-    @DeleteMapping("/eliminar/{id}")
-    public String eliminarProducto(@PathVariable Long id ){
-        boolean eliminado = carrito.removeIf(producto -> producto.getId().equals((long) id));
-        return eliminado ? "perfume ha sido eliminado del carrito" : "producto no estaba en el carrito";
-
-    }
-    //vercarrito
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public CollectionModel<EntityModel<Producto>> verCarrito() {
         List<EntityModel<Producto>> productos = carrito.stream()
-            .map(carritoAssembler::toModel)
+            .map(assembler::toModel)
             .collect(Collectors.toList());
+
         return CollectionModel.of(productos,
             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarritoControllerV2.class).verCarrito()).withSelfRel());
     }
 
 
-    @PostMapping("/confirmar")
-    public String confirmarCompra() {
-        Map<Long, Integer> cantidades = new HashMap<>();
-
-        for (Producto producto : carrito) {
-            long id = producto.getId();
-            cantidades.put(id, cantidades.getOrDefault(id, 0) + 1);
+    @PostMapping("/agregar/{id}")
+    public ResponseEntity<EntityModel<Producto>> agregarProducto(@PathVariable Long id) {
+        Producto producto = productoService.getProductoId(id);
+        if (producto == null) {
+            return ResponseEntity.notFound().build();
         }
-        for (Map.Entry<Long, Integer> entry : cantidades.entrySet()) {
-            Long productoId = entry.getKey();
-            int cantidadComprada = entry.getValue();
-            Producto productoEnBD = productoServ.getProductoId(productoId);
-
-            if (productoEnBD != null && productoEnBD.getStock() >= cantidadComprada) {
-                productoEnBD.setStock(productoEnBD.getStock() - cantidadComprada);
-                productoServ.updateProducto(productoEnBD);
-            } else {
-                return "No hay stock" + productoId;
+        for (Producto p : carrito) {
+            if (p.getId().equals(id)) {
+                return ResponseEntity.badRequest().body(assembler.toModel(producto));
             }
         }
-
-        carrito.clear();
-        return "Gracias por tu compra";
+        carrito.add(producto);
+        return ResponseEntity.created(
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarritoControllerV2.class)
+                .buscarProducto(id)).toUri()
+        ).body(assembler.toModel(producto));
     }
 
+    @GetMapping("/{id}")
+    public EntityModel<Producto> buscarProducto(@PathVariable Long id) {
+        return carrito.stream()
+            .filter(p -> p.getId().equals(id))
+            .findFirst()
+            .map(assembler::toModel)
+            .orElseThrow(() -> new NoSuchElementException("Producto no encontrado en el carrito con ID: " + id));
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<?> eliminarProducto(@PathVariable Long id) {
+        boolean eliminado = carrito.removeIf(p -> p.getId().equals(id));
+        return eliminado ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/vaciar")
+    public ResponseEntity<?> vaciarCarrito() {
+        carrito.clear();
+        return ResponseEntity.noContent().build();
+    }
 }

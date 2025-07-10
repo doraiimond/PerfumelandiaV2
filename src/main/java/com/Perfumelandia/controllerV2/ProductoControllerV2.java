@@ -19,13 +19,8 @@ import org.springframework.hateoas.MediaTypes;
 import java.util.stream.Collectors;
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 @RestController
 @RequestMapping("/api/v2/productos") 
-@Tag(name="Productos",
-    description="Operaciones de los productos")
 public class ProductoControllerV2 {
 
     @Autowired
@@ -35,8 +30,6 @@ public class ProductoControllerV2 {
     @Autowired
     private ProductoModelAssembler assembler;
 
-    @Operation(summary="Agregar un producto al carro",
-                description="Agrega productos segun su id")
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Producto>> registrarProducto(@RequestBody Producto p) {
         Producto crear = productoServ.saveProducto(p);
@@ -46,18 +39,12 @@ public class ProductoControllerV2 {
             .body(assembler.toModel(crear));
     }
 
-    @Operation(summary="Listar Productos",
-                description="Muestra los productos Registrados en la base de datos")    
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public CollectionModel<EntityModel<Producto>> obtenerProductos() {
                 if (!datosCargados && productoServ.getProducto().isEmpty()) {
-            productoServ.saveProducto(new Producto(null, "Perfume Ocean", "Marca A", 10, 18990
-              ));
-            productoServ.saveProducto(new Producto(null, "Perfume Sunset", "Marca B", 7, 22500
-              ));
-            productoServ.saveProducto(new Producto(null, "Perfume Midnight", "Marca C", 5, 24990
-              ));
-
+            productoServ.saveProducto(new Producto(null, "Perfume Ocean", "Marca A", 10, 18990));
+            productoServ.saveProducto(new Producto(null, "Perfume Sunset", "Marca B", 7, 22500));
+            productoServ.saveProducto(new Producto(null, "Perfume Midnight", "Marca C", 5, 24990));
             datosCargados = true;
         }
         List<EntityModel<Producto>> productos = productoServ.getProducto().stream()
@@ -68,25 +55,12 @@ public class ProductoControllerV2 {
             obtenerProductos()).withSelfRel());
     }
 
-    @Operation(summary="Obtener Producto",
-                description="Obtiene un producto segun su id")
-    @GetMapping("/{id}")
-    public Producto obtenerProductoPorId(@PathVariable Long id) {
-        return productoServ.getProductoId(id);
+    @GetMapping(value ="/{id}", produces = MediaTypes.HAL_JSON_VALUE)
+    public EntityModel<Producto> obtenerProductoPorId(@PathVariable Long id) {
+        Producto producto = productoServ.getProductoId(id);
+        return assembler.toModel(producto);
     }
 
-
-    @Operation(hidden = true)
-    @GetMapping("/{id}/actualizar")
-    public ResponseEntity<Void> getActualizarProductoLink(@PathVariable Long id) {
-        return ResponseEntity.ok().build();
-    }
-
-
-
-
-    @Operation(summary="Eliminar Producto",
-                description="Elimina un producto segun su id")    
     @DeleteMapping("/{id}")
     public String eliminarProducto(@PathVariable Long id) {
         return productoServ.deleteProducto(id);
