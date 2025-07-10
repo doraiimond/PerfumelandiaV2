@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("http://192.168.1.9:8080/api/v2/productos")
+  fetch("http://192.168.1.24:8080/api/v2/productos")
     .then(res => res.json())
     .then(data => {
       const productos = data._embedded?.productoList || [];

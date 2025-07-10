@@ -41,19 +41,27 @@ public class ProductoControllerV2 {
 
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public CollectionModel<EntityModel<Producto>> obtenerProductos() {
-                if (!datosCargados && productoServ.getProducto().isEmpty()) {
-            productoServ.saveProducto(new Producto(null, "Perfume Ocean", "Marca A", 10, 18990));
-            productoServ.saveProducto(new Producto(null, "Perfume Sunset", "Marca B", 7, 22500));
-            productoServ.saveProducto(new Producto(null, "Perfume Midnight", "Marca C", 5, 24990));
-            datosCargados = true;
+        try {
+            if (!datosCargados && productoServ.getProducto().isEmpty()) {
+                productoServ.saveProducto(new Producto(null, "Perfume Ocean", "Marca A", 10, 18990));
+                productoServ.saveProducto(new Producto(null, "Perfume Sunset", "Marca B", 7, 22500));
+                productoServ.saveProducto(new Producto(null, "Perfume Midnight", "Marca C", 5, 24990));
+                datosCargados = true;
+            }
+
+            List<EntityModel<Producto>> productos = productoServ.getProducto().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+            return CollectionModel.of(productos,
+                linkTo(methodOn(ProductoControllerV2.class).obtenerProductos()).withSelfRel());
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Imprime el error completo en consola
+            throw e; // Sigue lanzándolo para que se vea como error 500 en Postman o el navegador
         }
-        List<EntityModel<Producto>> productos = productoServ.getProducto().stream()
-            .map(assembler::toModel)
-            .collect(Collectors.toList());
-        return CollectionModel.of(productos,
-            linkTo(methodOn(ProductoControllerV2.class).
-            obtenerProductos()).withSelfRel());
     }
+
 
     @GetMapping(value ="/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public EntityModel<Producto> obtenerProductoPorId(@PathVariable Long id) {
@@ -65,4 +73,11 @@ public class ProductoControllerV2 {
     public String eliminarProducto(@PathVariable Long id) {
         return productoServ.deleteProducto(id);
     }
+
+    
+
+    
+
+
 }
+

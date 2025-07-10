@@ -14,15 +14,12 @@ import org.springframework.hateoas.MediaTypes;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v2/notificaciones")
-@Tag(name = "Notificaciones", description = "Operaciones sobre notificaciones del sistema")
+
 public class NotificacionControllerV2 {
 
     @Autowired
@@ -31,7 +28,7 @@ public class NotificacionControllerV2 {
     @Autowired
     private NotificacionModelAssembler assembler;
 
-    @Operation(summary = "Crear Notificación", description = "Guarda una nueva notificación en la base de datos")
+
     @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<Notificacion>> crearNotificacion(@RequestBody Notificacion notificacion) {
         Notificacion creada = notificacionServ.guardarNotificacion(notificacion);
@@ -41,7 +38,6 @@ public class NotificacionControllerV2 {
             .body(assembler.toModel(creada));
     }
 
-    @Operation(summary = "Listar Notificaciones", description = "Devuelve todas las notificaciones registradas")
     @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
     public CollectionModel<EntityModel<Notificacion>> listarNotificaciones() {
         List<EntityModel<Notificacion>> notificaciones = notificacionServ.obtenerNotificaciones().stream()

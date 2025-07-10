@@ -43,17 +43,15 @@ public class CarritoControllerV2 {
         if (producto == null) {
             return ResponseEntity.notFound().build();
         }
-        for (Producto p : carrito) {
-            if (p.getId().equals(id)) {
-                return ResponseEntity.badRequest().body(assembler.toModel(producto));
-            }
-        }
         carrito.add(producto);
+        EntityModel<Producto> productoModel = assembler.toModel(producto);
         return ResponseEntity.created(
-            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CarritoControllerV2.class)
-                .buscarProducto(id)).toUri()
-        ).body(assembler.toModel(producto));
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(CarritoControllerV2.class).buscarProducto(id)
+            ).toUri()
+        ).body(productoModel);
     }
+
 
     @GetMapping("/{id}")
     public EntityModel<Producto> buscarProducto(@PathVariable Long id) {
@@ -75,4 +73,32 @@ public class CarritoControllerV2 {
         carrito.clear();
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/confirmar")
+    public ResponseEntity<String> confirmarCompra() {
+        Map<Long, Integer> cantidades = new HashMap<>();
+
+        for (Producto producto : carrito) {
+            long id = producto.getId();
+            cantidades.put(id, cantidades.getOrDefault(id, 0) + 1);
+        }
+
+        for (Map.Entry<Long, Integer> entry : cantidades.entrySet()) {
+            Long productoId = entry.getKey();
+            int cantidadComprada = entry.getValue();
+            Producto productoEnBD = productoService.getProductoId(productoId);
+
+            if (productoEnBD != null && productoEnBD.getStock() >= cantidadComprada) {
+                productoEnBD.setStock(productoEnBD.getStock() - cantidadComprada);
+                productoService.updateProducto(productoEnBD);
+            } else {
+                return ResponseEntity.badRequest()
+                    .body("No hay suficiente stock para el producto ID: " + productoId);
+            }
+        }
+
+        carrito.clear(); // importante vaciar el carrito
+        return ResponseEntity.ok("Compra realizada con éxito.");
+    }
+
 }

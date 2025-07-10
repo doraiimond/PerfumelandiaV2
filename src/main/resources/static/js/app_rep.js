@@ -1,4 +1,4 @@
-const API_URL="http://192.168.1.9:8080/api/v2/reportes";
+const API_URL="http://192.168.1.24:8080/api/v2/reportes";
 
 function enviarR(){
     const nombre = document.getElementById("nombre").value.trim();
@@ -9,7 +9,7 @@ function enviarR(){
         return;
       }
 
-      fetch("http://192.168.1.9:8080/api/v2/reportes", {
+      fetch("http://192.168.1.24:8080/api/v2/reportes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, email, asunto })
